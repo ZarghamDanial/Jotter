@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import Routes from './routes';
 import { withRouter } from 'react-router';
+import { Auth } from 'aws-amplify';
 
 class App extends React.Component {
   constructor(props) {
@@ -10,6 +11,29 @@ class App extends React.Component {
       isAuthenticated: false,
     };
   }
+
+  userHasAuthenticated = (value) => {
+    this.setState({ isAuthenticated: value });
+  };
+
+  handleLogout = async (event) => {
+    await Auth.signOut();
+    this.userHasAuthenticated(false);
+    this.props.history.push('/login');
+  };
+
+  async componentDidMount() {
+    try {
+      await Auth.currentSession();
+      this.userHasAuthenticated(true);
+      this.props.history.push('/alljots');
+    } catch (e) {
+      if (e !== 'No current user') {
+        alert(e);
+      }
+    }
+  }
+
   render() {
     return (
       <Fragment>
@@ -57,7 +81,10 @@ class App extends React.Component {
             </ul>
           </div>
         </div>
-        <Routes />
+        <Routes
+          userHasAuthenticated={this.userHasAuthenticated}
+          isAuthenticated={this.state.isAuthenticated}
+        />
       </Fragment>
     );
   }
