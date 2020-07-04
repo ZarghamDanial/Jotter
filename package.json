@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ckeditor/ckeditor5-build-balloon": "^20.0.0",
+    "@ckeditor/ckeditor5-build-classic": "^20.0.0",
+    "@ckeditor/ckeditor5-react": "^2.1.0",
     "aws-amplify": "^3.0.18",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",

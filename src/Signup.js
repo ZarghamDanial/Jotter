@@ -6,8 +6,9 @@ import {
   FormLabel,
   Button,
 } from 'react-bootstrap';
+import { Auth } from 'aws-amplify';
 
-export default class sample extends Component {
+export default class Signup extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,10 +39,27 @@ export default class sample extends Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
+    try {
+      const newUser = await Auth.signUp({
+        username: this.state.email,
+        password: this.state.password,
+      });
+      this.setState({ newUser });
+    } catch (e) {
+      alert(e.message);
+    }
   };
 
   handleConfirmationSubmit = async (event) => {
     event.preventDefault();
+    try {
+      await Auth.confirmSignUp(this.state.email, this.state.confirmationCode);
+      await Auth.signIn(this.state.email, this.state.password);
+      this.props.userHasAuthenticated(true);
+      this.props.history.push('/');
+    } catch (e) {
+      alert(e.message);
+    }
   };
 
   render() {

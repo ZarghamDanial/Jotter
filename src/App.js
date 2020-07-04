@@ -22,18 +22,6 @@ class App extends React.Component {
     this.props.history.push('/login');
   };
 
-  async componentDidMount() {
-    try {
-      await Auth.currentSession();
-      this.userHasAuthenticated(true);
-      this.props.history.push('/alljots');
-    } catch (e) {
-      if (e !== 'No current user') {
-        alert(e);
-      }
-    }
-  }
-
   render() {
     return (
       <Fragment>
@@ -46,7 +34,9 @@ class App extends React.Component {
               {this.state.isAuthenticated ? (
                 <Fragment>
                   <li className='nav-item'>
-                    <NavLink onClick={this.handleLogout}>Logout</NavLink>
+                    <NavLink to onClick={this.handleLogout}>
+                      Logout
+                    </NavLink>
                   </li>
                   <li className='nav-item'>
                     <NavLink to='/newjot' className='nav-link'>
@@ -87,6 +77,18 @@ class App extends React.Component {
         />
       </Fragment>
     );
+  }
+
+  async componentDidMount() {
+    try {
+      await Auth.currentSession();
+      this.userHasAuthenticated(true);
+      this.props.history.push('/alljots');
+    } catch (e) {
+      if (e !== 'No current user') {
+        alert(e);
+      }
+    }
   }
 }
 
